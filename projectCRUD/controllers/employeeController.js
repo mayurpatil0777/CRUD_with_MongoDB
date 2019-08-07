@@ -10,16 +10,18 @@ router.get('/',(req,res)=>{
     });
 })
  
-router.post('/',(req,res)=>{ 
-    if(req.body._id =='')
+router.post('/',(req,res)=>{
+//    console.log("reqqqq",req)
+    if(req.body.id =='')
     insertRecord(req,res)
-    else
+     else{
     updateRecord(req,res)
+}
 });
 
 function updateRecord(req,res){
     
-    Employee.findOneAndUpdate({ _id: req.body._id}, req.body, {new: true}, (err,doc)=>{
+    Employee.findOneAndUpdate({ _id: req.body.id}, req.body, {new: true}, (err,doc)=>{
         if(!err){
             res.redirect('/employee/list');
         }
@@ -66,5 +68,14 @@ router.get('/:id',(req,res)=>{
             })
         } 
     })
+})
+
+router.get('/delete/:id',(req,res)=>{
+    Employee.findByIdAndRemove(req.params.id, (err,doc)=>{
+        if(!err)
+            res.redirect('/employee/list')
+        else
+        console.log("error in employee delete"+err)
+    });
 })
 module.exports= router;
